@@ -42,6 +42,38 @@ git pull
 git submodule update --init --recursive    
 2、工具安装不完整，用apt-get install 命令再逐一检查一下    
 
+#### 测试工具可用性
+编译成功后，会生成/opt/riscv/目录，并可以在该目录下找到相应的工具    
+输入命令    
+/opt/riscv/bin/riscv64-unknown-elf-gcc -v    
+可以看到相应的信息输出，表示已经成功编译得到相应的开发工具    
+Using built-in specs.
+COLLECT_GCC=/opt/riscv/bin/riscv64-unknown-elf-gcc
+COLLECT_LTO_WRAPPER=/opt/riscv/libexec/gcc/riscv64-unknown-elf/9.2.0/lto-wrapper
+Target: riscv64-unknown-elf
+Configured with: /root/rv/riscv-gnu-toolchain/riscv-gcc/configure --target=riscv64-unknown-elf --prefix=/opt/riscv --disable-shared --disable-threads --enable-languages=c,c++ --with-system-zlib --enable-tls --with-newlib --with-sysroot=/opt/riscv/riscv64-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././riscv-gcc --enable-checking=yes --disable-multilib --with-abi=lp64d --with-arch=rv64imafdc --with-tune=rocket 'CFLAGS_FOR_TARGET=-Os  -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os  -mcmodel=medlow'
+Thread model: single
+gcc version 9.2.0 (GCC) 
+
+#### 将工具路径加入PATH环境变量
+如果不想每次都输入/opt/riscv/bin/这么长的绝对路径，而只想输入riscv64-unknown-elf-gcc就可以使用工具，就需要将工具的路径加入到PATH环境变量，Linux会到相应路径下去查找相应的可执行程序    
+先看一下PATH的当前值，输入命令    
+echo $PATH
+可以看到类似的值：    
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games    
+你可以采取export的方式临时将工具所在的路径添加进PATH，但更建议修改~/.bashrc文件来永久实现,输入命令    
+vim ~/.bashrc    
+（这里假设你是一个Linux小白），用方向键将光标移动到文件的最后一行的最后一个字符后面，按一下i，最下面会显示-- INSERT --表示进入插入模式，按一下回车键新起一行，输入    
+export PATH=$PATH:/opt/riscv/bin    
+然后按一下ESC键（不放心就多按几次），可以看到最下面的-- INSERT--消失，表示进入命令模式，在命令模式下输入    
+:wq    
+保存修改并退出vim，回到Linux命令提示符下，输入以下命令使刚才的修改生效    
+source ~/.bashrc    
+输入命令riscv64-unknown-elf-gcc -v（在输入的过程中按Tab键试试）看一下效果    
+如果可以看到与前面输入绝对路径一样的输出，表示配置正确，否则再次用vim打开.bashrc文件检查修改是否正确    
+
+
+
 
 
 
